@@ -1,7 +1,13 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 const DiaryEditor = () => {
   // diaryeditor가 input 을 컨트롤 할 수 있게 만들어줘야함
+
+  // focus 할 부분을 DOM 으로 찾아갈때 !
+  // MutableRefObject -> DOM 요소를 접근할 수 있는 기능
+  const authorInput = useRef();
+  const contentInput = useRef();
+
   const [state, setState] = useState({
     // ...state 라는 spread 연산자가 가지고 있는것들.
     author: "",
@@ -30,7 +36,19 @@ const DiaryEditor = () => {
   };
 
   const handleSubmit = (e) => {
-    console.log(state);
+    if (state.author.length < 1) {
+      //   alert("작성자는 최소 1 글자 이상 입력해주세요");
+      //focus
+      authorInput.current.focus();
+      return; // return 을 써서 함수를 끝내야함, 더이상 출력되지 않도록
+    }
+    if (state.content.length < 5) {
+      //   alert("본문은 최소 5 글자 이상 입력해주세요");
+      //focus
+      contentInput.current.focus();
+
+      return;
+    }
     alert(" Saved!");
   };
   return (
@@ -38,6 +56,7 @@ const DiaryEditor = () => {
       <h2>Karis's Diary</h2>
       <div>
         <input
+          ref={authorInput}
           name="author"
           value={state.author}
           //   onChange={(e) => {
@@ -52,6 +71,7 @@ const DiaryEditor = () => {
       {/* 본문만들기 */}
       <div>
         <textarea
+          ref={contentInput}
           name="content"
           value={state.content}
           //   onChange={(e) => {
@@ -65,6 +85,7 @@ const DiaryEditor = () => {
       </div>
 
       <div>
+        <span> 오늘의 감정점수 : </span>
         <select
           name="emotion"
           value={state.emotion}
