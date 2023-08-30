@@ -1,4 +1,5 @@
 import DiaryItem from "./DiaryItem";
+
 // diaryList 가 props 로 받아서 들어옴 from App.js
 const DiaryList = ({ diaryList }) => {
   // 정상적으로 prop을 받았는지 확인 console
@@ -14,7 +15,8 @@ const DiaryList = ({ diaryList }) => {
           (
             it // 배열의 하나하나의 요소가 바뀌어서 들어옴 from app Component
           ) => (
-            <DiaryItem />
+            // ...it에 들어있는 모든 아이템이 prop으로 전달됨
+            <DiaryItem key={it.id} {...it} />
             // <div key={it.id}>
             //   <div>작성자 : {it.author}</div>
             //   <div>일기 : {it.content}</div>
