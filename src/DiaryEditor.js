@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 
-const DiaryEditor = () => {
+// onCreate 함수를 prop 으로 받아와야 함 from App.js
+const DiaryEditor = ({ onCreate }) => {
   // diaryeditor가 input 을 컨트롤 할 수 있게 만들어줘야함
 
   // focus 할 부분을 DOM 으로 찾아갈때 !
@@ -49,7 +50,15 @@ const DiaryEditor = () => {
 
       return;
     }
+    // handleSubmit 을 지나서 변화가 있었을때, onCreate함수를 통해서 넘겨줌 to App.js -> const newItem 이 추가 되는것
+    onCreate(state.author, state.content, state.emotion);
     alert(" Saved!");
+    // 저장한 후에 초기화 시켜주기
+    setState({
+      author: "",
+      content: "",
+      emotion: 1,
+    });
   };
   return (
     <div className="DiaryEditor">
