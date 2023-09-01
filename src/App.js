@@ -61,20 +61,33 @@ function App() {
 
   // 삭제하기
   // 어떤 Id 를 가진 요소를 지우기를 원하는지 매개변수로 받아야함 -> targetId
-  // DiaryItem 에서 onDelete 를 불러오게 해야한다.  -> DiaryItem 의 부모요소인 DiaryList에 props 를 해야한다.
+  // DiaryItem 에서 onRemove 를 불러오게 해야한다.  -> DiaryItem 의 부모요소인 DiaryList에 props 를 해야한다.
   // targetId 를 삭제하면 변경이기때문에 -> 위의 setData 함수에 전달해서 -> data 의 배열을 바꿔주면 된다.
   // filter 를 사용해서 targetID 가 아니라면 => newDiaryList 가 되고 -> setData 로 전달
-  const onDelete = (targetId) => {
+  const onRemove = (targetId) => {
     console.log(`${targetId} 가 삭제되었습니다`);
     const newDiaryList = data.filter((it) => it.id !== targetId);
     console.log(newDiaryList);
     setData(newDiaryList);
   };
 
+  // 수정기능 함수 from DiaryItem -> 어떤 targetId 를 가져와서 newContent(수정된 데이터가 무엇인지)!
+  // setData 함수 호출해서 Data의 값을 바꿔주면됨 -> 내장함수 map을 이용해서 모든 요소들이 현재매개변수로 전달받은 targetId와 일치하는 ID를 갖는지 검사
+  // 일치하게되면 -> 수정대상이됨 . -> 원본데이터를 전부다 불러줌 {...it} -> content 를 newContent로 업데이트 해주면 됨.
+  // 일치하지 않으면 -> 수정대상이 아님 -> it 을 반환함
+  // onEdit 함수는 수정폼을 갖고있는 DiaryItem이 호출을 해야함 -> 부모인 DiaryList 로 전달해야함
+  const onEdit = (targetId, newContent) => {
+    setData(
+      data.map((it) =>
+        it.id === targetId ? { ...it, content: newContent } : it
+      )
+    );
+  };
+
   return (
     <div className="App">
       <DiaryEditor onCreate={onCreate} />
-      <DiaryList onDelete={onDelete} diaryList={data} />
+      <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
   );
 }
