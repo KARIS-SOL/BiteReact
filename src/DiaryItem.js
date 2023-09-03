@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 // DiaryList 의 배열에 배열대신 DiaryItem 을 연결함
 
@@ -24,6 +24,9 @@ const DiaryItem = ({
   // useState() -> 기본값으로 content 를 넣으면 수정전 글씨가 뜬다. -> localContent 의 값이 content 의 값이라고 생각하기.
   const [localContent, setLocalContent] = useState(content);
 
+  // textarea Focus 주기 -> Empty 일 때 수정완료 버튼 누르면 그 이상으로 안넘어감
+  const localContentInput = useRef();
+
   // 수정할글씨를 작성하고 수정취소를 눌렀을 때, 원래 본문으로 돌아오고, 수정단계에서 썼던 다른 글씨들은 사라지게 -> 초기화
   const handleQuitEdit = () => {
     setIsEdit(false);
@@ -35,7 +38,14 @@ const DiaryItem = ({
   // 타겟인 Id 와 새로변경된 localContent 를 전달 ->
   const handleEdit = () => {
     if (localContent.length < 5) {
+      localContentInput.current.focus();
       return;
+    }
+    // 수정 완료전에 Prompt창으로 물어보기 -> confirm 기능 사용 -> 동의 할 시에 onEdit 함수 실행
+    // 수정완료후 수정폼을 닫아줘야함
+    if (window.confirm(`${id}번 째 일기를 수정하시겠습니까?`)) {
+      onEdit(id, localContent);
+      toggleIsEdit();
     }
   };
   // 삭제하기
@@ -58,6 +68,7 @@ const DiaryItem = ({
         {isEdit ? (
           <>
             <textarea
+              ref={localContentInput}
               value={localContent}
               onChange={(e) => setLocalContent(e.target.value)}
             />
