@@ -1,6 +1,7 @@
 // React 의 LifeCycle 을 확인하기 위한 연습
 
 import React, { useEffect, useState } from "react";
+const 
 
 const LifeCycle = () => {
   //   const [count, setCount] = useState(0);
@@ -31,8 +32,7 @@ const LifeCycle = () => {
   //   }, [text]);
 
   // LifeCycle 이 끝나는 것
-  const [isVisible, setIsVisible] = useState(false);
-  const toggle = () => setIsVisible(!isVisible);
+
 
   return (
     <div style={{ padding: 20 }}>
