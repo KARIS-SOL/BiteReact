@@ -1,8 +1,8 @@
 import "./App.css";
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
-import { useRef, useState } from "react";
-import LifeCycle from "./LifeCycle";
+import { useEffect, useRef, useState } from "react";
+// import LifeCycle from "./LifeCycle";
 
 // const dummyList = [
 //   {
@@ -39,6 +39,31 @@ function App() {
   // index 의 시작은 0 부터
   // id: dataId.current 는  어떠한 DOM도 선택하지 않고 0 부터 시작하는 값을 갖는것
   const dataId = useRef(0);
+
+  // getData 를 Promise 를 반환하는 비동기함수
+  const getData = async () => {
+    const res = await fetch(
+      "https://jsonplaceholder.typicode.com/comments"
+    ).then((res) => res.json());
+
+    // json 에서 가져온 것들을 res 로 담아서 내가 원하는 틀로 수정하기
+    // 0 부터 19까지 자르고, map 을 이용해서 모든 배열을 순회
+    // callback 하는 함수에서 그 배열을 initData 함수에 넣겠다
+    const initData = res.slice(0, 20).map((it) => {
+      return {
+        author: it.email,
+        content: it.body,
+        emotion: Math.floor(Math.random() * 5) + 1,
+        created_date: new Date().getTime(),
+        id: dataId.current++,
+      };
+    });
+    setData(initData);
+  };
+  // useEffect 로 mount 되자마자 실행 -> getData 실행
+  useEffect(() => {
+    getData();
+  }, []);
 
   // 추가하기
   // 일기배열에 새로운 일기를 추가하는 함수 만들기 -> DiaryEditor 에 prop 으로 내려주기
@@ -87,7 +112,7 @@ function App() {
 
   return (
     <div className="App">
-      <LifeCycle />
+      {/* <LifeCycle /> */}
       <DiaryEditor onCreate={onCreate} />
       <DiaryList onEdit={onEdit} onRemove={onRemove} diaryList={data} />
     </div>
