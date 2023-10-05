@@ -1,38 +1,47 @@
 // React 의 LifeCycle 을 확인하기 위한 연습
 
 import React, { useEffect, useState } from "react";
-const 
+import { isVisible } from "@testing-library/user-event/dist/utils";
 
+const UnmountTest = () => {
+  // component 가 unmount 되는 순간을 control 하기
+  useEffect(() => {
+    console.log("mount");
+    return () => {
+      // unmount 되는 시점에 출력되서 실행되게 함
+      console.log("unmount");
+    };
+  }, []);
+
+  return <div>Unmount Testing Component</div>;
+};
 const LifeCycle = () => {
-  //   const [count, setCount] = useState(0);
-  //   const [text, setText] = useState("");
+  // const [count, setCount] = useState(0);
+  // const [text, setText] = useState("");
 
-  //   // useEffect -> Mount 되는 시점제어 : [] 에 빈배열
-  //   useEffect(() => {
-  //     console.log("Mount!");
-  //   }, []);
+  // useEffect(() => {
+  //   console.log("Mount");
+  // }, []);
 
-  //   // Component 가 Update (state 혹은 props의 변경) -> dependency 를 넣지 않으면 됌
-  //   useEffect(() => {
-  //     console.log("Update!");
-  //   });
+  // useEffect(() => {
+  //   console.log("Update");
+  // });
 
-  //   // count 넣어보기 -> dependency array 의 값이 변화하게되면 -> 그순간 call back 함수가 실행이된다 : count state 가 변화하는 순간 실행
-  //   useEffect(() => {
-  //     console.log(`count is updated : ${count}`);
-  //     if (count > 5) {
-  //       alert("count 가 5를 넘어갔습니다, 따라서 0로 초기화 합니다");
-  //       setCount(0);
-  //     }
-  //   }, [count]);
+  // // []dependency array 에 있는 값이 변화하게되면, 그 순간 call back 함수 ()=>{} 가 실행된다
+  // useEffect(() => {
+  //   console.log(`count is updated : ${count}`);
+  //   if (count > 5) {
+  //     alert("count 가 5를 넘었습니다 따라서 1로 초기화 합니다");
+  //     setCount(1);
+  //   }
+  // }, [count]);
 
-  //   // text 넣어보기 !
-  //   useEffect(() => {
-  //     console.log(`text is updated : ${text}`);
-  //   }, [text]);
+  // useEffect(() => {
+  //   console.log(`text is updated : ${text}`);
+  // }, [text]);
 
-  // LifeCycle 이 끝나는 것
-
+  const [isVisible, setIsVisible] = useState(false);
+  const toggle = () => setIsVisible(!isVisible);
 
   return (
     <div style={{ padding: 20 }}>
@@ -40,10 +49,10 @@ const LifeCycle = () => {
         {count}
         <button onClick={() => setCount(count + 1)}>+</button>
       </div>
-      <div>
-        <input value={text} onChange={(e) => setText(e.target.value)} />
-      </div> */}
-      <button onClick={toggle}>ON / OFF</button>
+      <input value={text} onChange={(e) => setText(e.target.value)}></input> */}
+      <button onClick={toggle}>ON/OFF</button>
+      {/* isVisible 이 true 일때만 unmountTest 가 화면에 렌더링 하게, 단락회로평가 사용 */}
+      {isVisible && <UnmountTest />}
     </div>
   );
 };

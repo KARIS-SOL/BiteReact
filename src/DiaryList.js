@@ -5,7 +5,7 @@ import DiaryItem from "./DiaryItem";
 // onEdit 을 App.js에서 props 로 받아서 DiaryItem 에 전달 해야함
 const DiaryList = ({ onEdit, onRemove, diaryList }) => {
   // 정상적으로 prop을 받았는지 확인 console
-  console.log(diaryList);
+  // console.log(diaryList);
   return (
     <div className="DiaryList">
       <h2>일기 리스트 </h2>
